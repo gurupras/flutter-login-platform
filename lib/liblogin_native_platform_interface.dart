@@ -13,6 +13,7 @@ abstract class LibloginNativePlatform extends PlatformInterface {
   /// The default instance of [LibloginNativePlatform] to use.
   ///
   /// Defaults to [MethodChannelLibloginNative].
+  static LibloginNativePlatform get instance => _instance;
   static set instance(LibloginNativePlatform instance) {
     PlatformInterface.verifyToken(instance, _token);
     _instance = instance;
