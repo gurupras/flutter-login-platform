@@ -17,6 +17,18 @@ class LibloginNativePlugin : FlutterPlugin {
     private lateinit var channel: MethodChannel
     private lateinit var loginChannel: MethodChannel
 
+    companion object {
+        private var loginChannel: MethodChannel? = null // Changed to loginChannel
+
+        fun dispatchRedirect(url: String) {
+            Log.d("LibloginNativePlugin", "Dispatching redirect with URL: $url")
+            loginChannel?.invokeMethod( // Changed to loginChannel
+                "handleAuthRedirect",
+                mapOf("url" to url)
+            )
+        }
+    }
+
     @VisibleForTesting
     internal val loginHandler =
         MethodCallHandler { call: MethodCall, result: Result ->
@@ -41,13 +53,17 @@ class LibloginNativePlugin : FlutterPlugin {
     override fun onAttachedToEngine(flutterPluginBinding: FlutterPlugin.FlutterPluginBinding) {
         channel = MethodChannel(flutterPluginBinding.binaryMessenger, "liblogin_native")
         channel.setMethodCallHandler(legacyHandler)
+        // LibloginNativePlugin.channel = channel // Removed this line
 
         loginChannel = MethodChannel(flutterPluginBinding.binaryMessenger, "me.gurupras.liblogin")
         loginChannel.setMethodCallHandler(loginHandler)
+        LibloginNativePlugin.loginChannel = loginChannel // Assigned loginChannel here
     }
 
     override fun onDetachedFromEngine(binding: FlutterPlugin.FlutterPluginBinding) {
         channel.setMethodCallHandler(null)
+        // LibloginNativePlugin.channel = null // Removed this line
         loginChannel.setMethodCallHandler(null)
+        LibloginNativePlugin.loginChannel = null // Assigned loginChannel here
     }
 }
