@@ -26,4 +26,8 @@ abstract class LibloginNativePlatform extends PlatformInterface {
   Future<String?> getPlatformInfo() {
     throw UnimplementedError('getPlatformInfo() has not been implemented.');
   }
+
+  Future<void> setAuthRedirectHandler(Function(String) handler) {
+    throw UnimplementedError('setAuthRedirectHandler() has not been implemented.');
+  }
 }

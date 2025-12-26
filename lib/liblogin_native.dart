@@ -2,12 +2,16 @@
 import 'liblogin_native_platform_interface.dart';
 
 class LibloginNative {
-  static Future<String?> getPlatformVersion() {
+  Future<String?> getPlatformVersion() {
     return LibloginNativePlatform.instance.getPlatformVersion();
   }
 
-  static Future<String?> getPlatformInfo() {
+  Future<String?> getPlatformInfo() {
     return LibloginNativePlatform.instance.getPlatformInfo();
+  }
+
+  Future<void> setAuthRedirectHandler(Function(String) handler) {
+    return LibloginNativePlatform.instance.setAuthRedirectHandler(handler);
   }
 }
 

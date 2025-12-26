@@ -1,4 +1,4 @@
-package com.example.liblogin_native
+package me.gurupras.liblogin
 
 import android.app.Activity
 import android.os.Bundle
