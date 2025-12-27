@@ -1,8 +1,3 @@
-// In order to *not* need this ignore, consider extracting the "web" version
-// of your plugin as a separate package, instead of inlining it in the same
-// package as the core of your plugin.
-// ignore: avoid_web_libraries_in_flutter
-
 import 'package:flutter_web_plugins/flutter_web_plugins.dart';
 import 'package:web/web.dart' as web;
 
@@ -22,5 +17,37 @@ class LibloginNativeWeb extends LibloginNativePlatform {
   Future<String?> getPlatformVersion() async {
     final version = web.window.navigator.userAgent;
     return version;
+  }
+
+  @override
+  Future<String?> getPlatformInfo() async {
+    return 'Web';
+  }
+
+  Function(String)? _authRedirectHandler;
+
+  @override
+  Future<void> setAuthRedirectHandler(Function(String) handler) async {
+    _authRedirectHandler = handler;
+    _checkInitialUrl();
+  }
+
+  void _checkInitialUrl() {
+    final uri = Uri.parse(web.window.location.href);
+    final code = uri.queryParameters['code'];
+    final state = uri.queryParameters['state'];
+
+    if (code != null && state != null) {
+      _authRedirectHandler?.call(uri.toString());
+      _clearUrlParameters(uri);
+    }
+  }
+
+  void _clearUrlParameters(Uri uri) {
+    final Map<String, String> params = Map.from(uri.queryParameters);
+    params.remove('code');
+    params.remove('state');
+    final newUri = uri.replace(queryParameters: params);
+    web.window.history.replaceState(null, '', newUri.toString());
   }
 }

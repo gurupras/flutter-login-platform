@@ -28,6 +28,17 @@ abstract class LibloginNativePlatform extends PlatformInterface {
   }
 
   Future<void> setAuthRedirectHandler(Function(String) handler) {
-    throw UnimplementedError('setAuthRedirectHandler() has not been implemented.');
+    throw UnimplementedError(
+        'setAuthRedirectHandler() has not been implemented.');
+  }
+
+  Future<void> dispatchAuthRedirect(String url) {
+    throw UnimplementedError(
+        'dispatchAuthRedirect() has not been implemented.');
+  }
+
+  Future<bool> login(
+      {required Uri authUri, required String redirectUri}) {
+    throw UnimplementedError('login() has not been implemented.');
   }
 }

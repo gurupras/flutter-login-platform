@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import 'liblogin_native_platform_interface.dart';
 
@@ -33,12 +34,30 @@ class MethodChannelLibloginNative extends LibloginNativePlatform {
   Future<String?> getPlatformInfo() async {
     final platformInfo =
         await methodChannel.invokeMethod<String>('getPlatformInfo');
-    print('Platform info: $platformInfo');
     return platformInfo;
   }
 
   @override
   Future<void> setAuthRedirectHandler(Function(String) handler) async {
     _authRedirectHandler = handler;
+    // Inform the native side about the channel to use for sending redirects
+    await methodChannel.invokeMethod(
+        'setAuthRedirectChannel', 'me.gurupras.liblogin');
+  }
+
+  @override
+  Future<void> dispatchAuthRedirect(String url) async {
+    await methodChannel.invokeMethod('dispatchAuthRedirect', url);
+  }
+
+  @override
+  Future<bool> login(
+      {required Uri authUri, required String redirectUri}) async {
+    // The redirectUri is not needed for the method channel implementation,
+    // as the native side handles the redirect interception.
+    if (await canLaunchUrl(authUri)) {
+      return await launchUrl(authUri, mode: LaunchMode.externalApplication);
+    }
+    return false;
   }
 }

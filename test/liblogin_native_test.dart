@@ -18,12 +18,14 @@ void main() {
       LibloginNativePlatform.instance = MockLibloginNativePlatform();
     });
 
+    final libloginNativePlugin = LibloginNative();
+
     test('getPlatformVersion returns correct version', () async {
-      expect(await LibloginNative.getPlatformVersion(), '42');
+      expect(await libloginNativePlugin.getPlatformVersion(), '42');
     });
 
     test('getPlatformInfo returns correct info', () async {
-      expect(await LibloginNative.getPlatformInfo(), 'Mocked platform info');
+      expect(await libloginNativePlugin.getPlatformInfo(), 'Mocked platform info');
     });
   });
 }
