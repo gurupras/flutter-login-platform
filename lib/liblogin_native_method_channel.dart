@@ -40,9 +40,6 @@ class MethodChannelLibloginNative extends LibloginNativePlatform {
   @override
   Future<void> setAuthRedirectHandler(Function(String) handler) async {
     _authRedirectHandler = handler;
-    // Inform the native side about the channel to use for sending redirects
-    await methodChannel.invokeMethod(
-        'setAuthRedirectChannel', 'me.gurupras.liblogin');
   }
 
   @override
