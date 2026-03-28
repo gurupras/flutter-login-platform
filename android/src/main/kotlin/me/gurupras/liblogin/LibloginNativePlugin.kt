@@ -18,23 +18,31 @@ class LibloginNativePlugin : FlutterPlugin {
 
     companion object {
         private var methodChannel: MethodChannel? = null
+        var pendingRedirectUrl: String? = null
 
         fun dispatchRedirect(url: String) {
             Log.d("LibloginNativePlugin", "Dispatching redirect with URL: $url")
-            methodChannel?.invokeMethod(
-                "handleAuthRedirect",
-                mapOf("url" to url)
-            )
+            // Store for Dart to poll on resume (reliable path)
+            pendingRedirectUrl = url
+            // Also attempt direct push as a best-effort fallback
+            methodChannel?.invokeMethod("handleAuthRedirect", mapOf("url" to url))
         }
     }
 
     override fun onAttachedToEngine(flutterPluginBinding: FlutterPlugin.FlutterPluginBinding) {
+        Log.d("LibloginNativePlugin", "onAttachedToEngine")
         methodChannel = MethodChannel(flutterPluginBinding.binaryMessenger, "me.gurupras.liblogin")
         methodChannel.setMethodCallHandler { call, result ->
             Log.d("LibloginNativePlugin", "onMethodCall: ${call.method}")
             when (call.method) {
                 "getPlatformInfo" -> result.success("Hello from Android")
                 "getPlatformVersion" -> result.success("Android ${android.os.Build.VERSION.RELEASE}")
+                "getPendingRedirectUrl" -> {
+                    val url = pendingRedirectUrl
+                    pendingRedirectUrl = null
+                    Log.d("LibloginNativePlugin", "getPendingRedirectUrl: returning $url")
+                    result.success(url)
+                }
                 else -> result.notImplemented()
             }
         }

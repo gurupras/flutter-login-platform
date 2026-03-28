@@ -34,8 +34,10 @@ class RedirectActivity : Activity() {
             Log.e(TAG, "Failed to dispatch redirect to Flutter", t)
         }
 
-        // Fire custom intent to bring app back to foreground
+        // Fire custom intent to bring app back to foreground, carrying the URL
+        // so MainActivity can dispatch it once the Flutter engine is active again.
         val resumeIntent = Intent(RESUME_ACTION).apply {
+            putExtra("redirect_url", uri.toString())
             addCategory(Intent.CATEGORY_DEFAULT)
             addFlags(
                 Intent.FLAG_ACTIVITY_NEW_TASK or
