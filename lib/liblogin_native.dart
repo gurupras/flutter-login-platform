@@ -11,8 +11,8 @@ void _ensurePlatformImplementation() {
   if (LibloginNativePlatform.instance is! MethodChannelLibloginNative) {
     return;
   }
-  // Register the Desktop implementation if we're on Linux or Windows.
-  if (!kIsWeb && (Platform.isLinux || Platform.isWindows)) {
+  // Register the Desktop implementation if we're on Linux, Windows, or macOS.
+  if (!kIsWeb && (Platform.isLinux || Platform.isWindows || Platform.isMacOS)) {
     LibloginNativeDesktop.registerWith();
   }
 }

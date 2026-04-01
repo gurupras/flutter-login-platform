@@ -46,6 +46,8 @@ flutter:
         pluginClass: LibloginNativePlugin
       linux:
         pluginClass: LibloginNativePlugin
+      macos:
+        pluginClass: LibloginNativePlugin
       windows:
         pluginClass: LibloginNativePluginCApi
       web:

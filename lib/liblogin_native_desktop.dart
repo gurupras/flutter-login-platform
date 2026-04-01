@@ -4,7 +4,7 @@ import 'package:liblogin_native/liblogin_native_platform_interface.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'local_auth_server.dart';
 
-/// The desktop implementation of [LibloginNativePlatform] for Linux and Windows.
+/// The desktop implementation of [LibloginNativePlatform] for Linux, Windows, and macOS.
 class LibloginNativeDesktop extends LibloginNativePlatform {
   final LocalAuthServer _localAuthServer = LocalAuthServer();
   Function(String)? _authRedirectHandler;
