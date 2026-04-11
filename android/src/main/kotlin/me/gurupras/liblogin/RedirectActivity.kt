@@ -39,6 +39,9 @@ class RedirectActivity : Activity() {
         val resumeIntent = Intent(RESUME_ACTION).apply {
             putExtra("redirect_url", uri.toString())
             addCategory(Intent.CATEGORY_DEFAULT)
+            // Target only this app so that other apps using liblogin_native
+            // are never offered by the OS as redirect handlers.
+            setPackage(packageName)
             addFlags(
                 Intent.FLAG_ACTIVITY_NEW_TASK or
                 Intent.FLAG_ACTIVITY_CLEAR_TOP or
